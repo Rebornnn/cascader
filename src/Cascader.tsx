@@ -3,7 +3,7 @@ import warning from 'rc-util/lib/warning';
 import useMergedState from 'rc-util/lib/hooks/useMergedState';
 import type { TreeSelectProps } from 'rc-tree-select';
 import generate from 'rc-tree-select/lib/generate';
-import type { FlattenDataNode } from 'rc-tree-select/lib/interface';
+import type { FlattenDataNode, LabelValueType } from 'rc-tree-select/lib/interface';
 import type { RefSelectProps, Placement } from 'rc-select/lib/generate';
 import OptionList from './OptionList';
 import type { CascaderValueType, DataNode, FieldNames, ShowSearchType } from './interface';
@@ -129,7 +129,7 @@ interface SingleCascaderProps extends BaseCascaderProps {
 
 interface MultipleCascaderProps extends BaseCascaderProps {
   checkable: true | React.ReactNode;
-
+  maxTagPlaceholder?: (omittedValues: LabelValueType[]) => React.ReactNode;
   onChange?: OnMultipleChange;
 }
 
