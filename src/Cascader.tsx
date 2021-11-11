@@ -126,6 +126,7 @@ interface BaseCascaderProps
   expandIcon?: React.ReactNode;
   loadingIcon?: React.ReactNode;
 
+  requestFailureIcon?: React.ReactNode
   requestFailureText?: string;
   refreshText?: string;
 }
@@ -186,6 +187,7 @@ const Cascader = React.forwardRef((props: CascaderProps, ref: React.Ref<Cascader
     dropdownMenuColumnStyle,
     dropdownPrefixCls,
 
+    requestFailureIcon = null,
     requestFailureText,
     refreshText,
 
@@ -345,6 +347,7 @@ const Cascader = React.forwardRef((props: CascaderProps, ref: React.Ref<Cascader
       dropdownMenuColumnStyle,
       search: searchConfig,
       dropdownPrefixCls,
+      requestFailureIcon,
       requestFailureText,
       refreshText,
     }),

@@ -137,6 +137,7 @@ class Demo extends React.Component {
         loadData={this.loadData}
         onChange={this.onChange}
         loadingIcon="💽"
+        requestFailureIcon='x'
         changeOnSelect
         style={{ width: 233 }}
       />

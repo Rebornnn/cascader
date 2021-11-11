@@ -45,6 +45,7 @@ ColumnProps) {
     expandIcon,
     loadingIcon,
     dropdownMenuColumnStyle,
+    requestFailureIcon,
     requestFailureText,
     refreshText,
   } = React.useContext(CascaderContext);
@@ -83,6 +84,7 @@ ColumnProps) {
               style={dropdownMenuColumnStyle}
             >
               <div className={`${menuItemPrefixCls}-load-empty-content`}>
+                {requestFailureIcon}
                 {requestFailureText}
                 <span
                   className={`${menuItemPrefixCls}-load-empty-content-refresh`}
