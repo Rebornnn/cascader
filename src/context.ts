@@ -16,6 +16,8 @@ type ContextProps = Required<
 > & {
   search: ShowSearchType;
   dropdownPrefixCls?: string;
+  requestFailureText?: string;
+  refreshText?: string;
 };
 
 const CascaderContext = React.createContext<ContextProps>({
@@ -27,6 +29,8 @@ const CascaderContext = React.createContext<ContextProps>({
   loadData: null,
   dropdownMenuColumnStyle: null,
   search: null,
+  requestFailureText: '请求失败',
+  refreshText: '刷新',
 });
 
 export default CascaderContext;

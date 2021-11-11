@@ -1,5 +1,5 @@
-import type { FlattenDataNode } from 'rc-tree-select/lib/interface';
-import { fillFieldNames } from 'rc-tree-select/lib/utils/valueUtil';
+import type { FlattenDataNode } from 'bonree-tree-select/lib/interface';
+import { fillFieldNames } from 'bonree-tree-select/lib/utils/valueUtil';
 import type {
   CascaderValueType,
   DataNode,
@@ -30,7 +30,7 @@ export function restoreCompatibleValue(
 
   while (current) {
     path.unshift(current.data.node[fieldNames.value]);
-    options.unshift(current.data.node as any as InternalDataNode);
+    options.unshift((current.data.node as any) as InternalDataNode);
 
     current = current.parent;
   }

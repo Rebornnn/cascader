@@ -1,6 +1,6 @@
 import * as React from 'react';
 import classNames from 'classnames';
-import { SelectContext } from 'rc-tree-select/lib/Context';
+import { SelectContext } from 'bonree-tree-select/lib/Context';
 
 export interface CheckboxProps {
   prefixCls: string;

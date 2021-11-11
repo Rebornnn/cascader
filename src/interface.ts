@@ -1,5 +1,10 @@
 import type * as React from 'react';
 
+export enum LOAD_STATUS {
+  LOADING = '_LOADING_',
+  LOAD_EMPTY = '_LOADED_EMPTY_',
+}
+
 export interface FieldNames {
   value?: string;
   label?: string;

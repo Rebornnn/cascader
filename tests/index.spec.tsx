@@ -643,7 +643,7 @@ describe('Cascader.Basic', () => {
 
   // https://github.com/ant-design/ant-design/issues/9793
   it('should not trigger onBlur and onFocus when select item', () => {
-    // This function is handled by `rc-select` instead
+    // This function is handled by `bonree-select` instead
   });
 
   // https://github.com/ant-design/ant-design/issues/18713

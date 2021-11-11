@@ -3,75 +3,109 @@ import React from 'react';
 import '../assets/index.less';
 import Cascader from '../src';
 
-const addressOptions = [
+// const addressOptions = [
+//   {
+//     label: '福建',
+//     value: 'fj',
+//     title: '测试标题',
+//     children: [
+//       {
+//         label: '福州',
+//         value: 'fuzhou',
+//         children: [
+//           {
+//             label: '马尾',
+//             value: 'mawei',
+//           },
+//         ],
+//       },
+//       {
+//         label: '泉州',
+//         value: 'quanzhou',
+//       },
+//     ],
+//   },
+//   {
+//     label: '浙江',
+//     value: 'zj',
+//     children: [
+//       {
+//         label: '杭州',
+//         value: 'hangzhou',
+//         children: [
+//           {
+//             label: '余杭',
+//             value: 'yuhang',
+//           },
+//         ],
+//       },
+//     ],
+//   },
+//   {
+//     label: '北京',
+//     value: 'bj',
+//     children: [
+//       {
+//         label: '朝阳区',
+//         value: 'chaoyang',
+//       },
+//       {
+//         label: '海淀区',
+//         value: 'haidian',
+//         disabled: true,
+//       },
+//       {
+//         label: 'TEST',
+//         value: 'test',
+//       },
+//     ],
+//   },
+//   {
+//     label: '顶层禁用',
+//     value: 'disabled',
+//     disabled: true,
+//     children: [
+//       {
+//         label: '看不见',
+//         value: 'invisible',
+//       },
+//     ],
+//   },
+//   ...new Array(20).fill(null).map((_, i) => ({ label: String(i), value: i })),
+// ];
+
+const options = [
   {
-    label: '福建',
-    value: 'fj',
-    title: '测试标题',
+    label: 'Light',
+    value: 'light',
+    children: new Array(20)
+      .fill(null)
+      .map((_, index) => ({ label: `Number ${index}`, value: index })),
+  },
+  {
+    label: 'Bamboo',
+    value: 'bamboo',
     children: [
       {
-        label: '福州',
-        value: 'fuzhou',
+        label: 'Little',
+        value: 'little',
         children: [
           {
-            label: '马尾',
-            value: 'mawei',
+            label: 'Toy Fish',
+            value: 'fish',
+          },
+          {
+            label: 'Toy Cards',
+            value: 'cards',
+          },
+          {
+            label: 'Toy Bird',
+            value: 'bird',
           },
         ],
       },
-      {
-        label: '泉州',
-        value: 'quanzhou',
-      },
     ],
   },
-  {
-    label: '浙江',
-    value: 'zj',
-    children: [
-      {
-        label: '杭州',
-        value: 'hangzhou',
-        children: [
-          {
-            label: '余杭',
-            value: 'yuhang',
-          },
-        ],
-      },
-    ],
-  },
-  {
-    label: '北京',
-    value: 'bj',
-    children: [
-      {
-        label: '朝阳区',
-        value: 'chaoyang',
-      },
-      {
-        label: '海淀区',
-        value: 'haidian',
-        disabled: true,
-      },
-      {
-        label: 'TEST',
-        value: 'test',
-      },
-    ],
-  },
-  {
-    label: '顶层禁用',
-    value: 'disabled',
-    disabled: true,
-    children: [
-      {
-        label: '看不见',
-        value: 'invisible',
-      },
-    ],
-  },
-  ...new Array(20).fill(null).map((_, i) => ({ label: String(i), value: i })),
 ];
 
 const defaultValue = ['fj', 'fuzhou'];
@@ -98,7 +132,7 @@ const Demo = () => {
         />
         Multiple
       </label>
-      <Cascader
+      {/* <Cascader
         style={{ width: 200 }}
         options={addressOptions}
         onChange={onChange}
@@ -109,6 +143,14 @@ const Demo = () => {
         showSearch
         // open
         // direction="rtl"
+      /> */}
+      <Cascader
+        showSearch
+        style={{ width: 293 }}
+        options={options}
+        onChange={onChange}
+        checkable
+        maxTagCount="responsive"
       />
     </>
   );

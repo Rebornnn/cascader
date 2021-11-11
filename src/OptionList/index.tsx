@@ -5,9 +5,10 @@ import KeyCode from 'rc-util/lib/KeyCode';
 import type {
   OptionListProps as SelectOptionListProps,
   RefOptionListProps,
-} from 'rc-select/lib/OptionList';
-import { SelectContext } from 'rc-tree-select/lib/Context';
-import type { OptionDataNode } from '../interface';
+} from 'bonree-select/lib/OptionList';
+import { SelectContext } from 'bonree-tree-select/lib/Context';
+import type { OptionDataNode} from '../interface';
+import { LOAD_STATUS } from '../interface';
 import Column from './Column';
 import { isLeaf, restoreCompatibleValue } from '../util';
 import CascaderContext from '../context';
@@ -34,13 +35,19 @@ const RefOptionList = React.forwardRef<RefOptionListProps, OptionListProps>((pro
   const rtl = direction === 'rtl';
 
   const { checkedKeys, halfCheckedKeys } = React.useContext(SelectContext);
-  const { changeOnSelect, expandTrigger, fieldNames, loadData, search, dropdownPrefixCls } =
-    React.useContext(CascaderContext);
+  const {
+    changeOnSelect,
+    expandTrigger,
+    fieldNames,
+    loadData,
+    search,
+    dropdownPrefixCls,
+  } = React.useContext(CascaderContext);
 
   const mergedPrefixCls = dropdownPrefixCls || prefixCls;
 
   // ========================= loadData =========================
-  const [loadingKeys, setLoadingKeys] = React.useState([]);
+  // const [loadingKeys, setLoadingKeys] = React.useState([]);
 
   const internalLoadData = (pathValue: React.Key) => {
     // Do not load when search
@@ -53,23 +60,22 @@ const RefOptionList = React.forwardRef<RefOptionListProps, OptionListProps>((pro
       const { options: optionList } = restoreCompatibleValue(entity as any, fieldNames);
       const rawOptionList = optionList.map(opt => opt.node);
 
-      setLoadingKeys(keys => [...keys, optionList[optionList.length - 1].value]);
-
-      loadData(rawOptionList);
+      // setLoadingKeys(keys => [...keys, optionList[optionList.length - 1].value]);
+      loadData(rawOptionList, { loading: LOAD_STATUS.LOADING, loadEmpty: LOAD_STATUS.LOAD_EMPTY });
     }
   };
 
   // zombieJ: This is bad. We should make this same as `rc-tree` to use Promise instead.
-  React.useEffect(() => {
-    if (loadingKeys.length) {
-      loadingKeys.forEach(loadingKey => {
-        const option = flattenOptions.find(opt => opt.value === loadingKey);
-        if (option.data.children || option.data.isLeaf === true) {
-          setLoadingKeys(keys => keys.filter(key => key !== loadingKey));
-        }
-      });
-    }
-  }, [flattenOptions, loadingKeys]);
+  // React.useEffect(() => {
+  //   if (loadingKeys.length) {
+  //     loadingKeys.forEach(loadingKey => {
+  //       const option = flattenOptions.find(opt => opt.value === loadingKey);
+  //       if (option.data.children || option.data.isLeaf === true) {
+  //         setLoadingKeys(keys => keys.filter(key => key !== loadingKey));
+  //       }
+  //     });
+  //   }
+  // }, [flattenOptions, loadingKeys]);
 
   // ========================== Values ==========================
   const checkedSet = React.useMemo(() => new Set(checkedKeys), [checkedKeys]);
@@ -317,7 +323,8 @@ const RefOptionList = React.forwardRef<RefOptionListProps, OptionListProps>((pro
     onToggleOpen,
     checkedSet,
     halfCheckedSet,
-    loadingKeys,
+    openFinalValue,
+    // loadingKeys,
   };
 
   // >>>>> Empty

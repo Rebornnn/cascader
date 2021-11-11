@@ -1,12 +1,18 @@
 import * as React from 'react';
 import warning from 'rc-util/lib/warning';
 import useMergedState from 'rc-util/lib/hooks/useMergedState';
-import type { TreeSelectProps } from 'rc-tree-select';
-import generate from 'rc-tree-select/lib/generate';
-import type { FlattenDataNode, LabelValueType } from 'rc-tree-select/lib/interface';
-import type { RefSelectProps, Placement } from 'rc-select/lib/generate';
+import type { TreeSelectProps } from 'bonree-tree-select';
+import generate from 'bonree-tree-select/lib/generate';
+import type { FlattenDataNode, LabelValueType } from 'bonree-tree-select/lib/interface';
+import type { RefSelectProps, Placement } from 'bonree-select/lib/generate';
 import OptionList from './OptionList';
-import type { CascaderValueType, DataNode, FieldNames, ShowSearchType } from './interface';
+import type {
+  CascaderValueType,
+  DataNode,
+  FieldNames,
+  ShowSearchType,
+  LOAD_STATUS,
+} from './interface';
 import CascaderContext from './context';
 import {
   connectValue,
@@ -19,12 +25,12 @@ import useUpdateEffect from './hooks/useUpdateEffect';
 import useSearchConfig from './hooks/useSearchConfig';
 
 /**
- * `rc-cascader` is much like `rc-tree-select` but API is very different.
+ * `rc-cascader` is much like `bonree-tree-select` but API is very different.
  * It's caused that component developer is not same person
  * and we do not rice the API naming standard at that time.
  *
- * To avoid breaking change, wrap the `rc-tree-select` to compatible with `rc-cascader` API.
- * This should be better to merge to same API like `rc-tree-select` or `rc-select` in next major version.
+ * To avoid breaking change, wrap the `bonree-tree-select` to compatible with `rc-cascader` API.
+ * This should be better to merge to same API like `bonree-tree-select` or `bonree-select` in next major version.
  *
  * Update:
  * - dropdown class change to `rc-cascader-dropdown`
@@ -112,10 +118,16 @@ interface BaseCascaderProps
   dropdownMenuColumnStyle?: React.CSSProperties;
   /** @private Internal usage. Do not use in your production. */
   dropdownPrefixCls?: string;
-  loadData?: (selectOptions: DataNode[]) => void;
+  loadData?: (
+    selectOptions: DataNode[],
+    loadStatus?: { loading: LOAD_STATUS.LOADING; loadEmpty: LOAD_STATUS.LOAD_EMPTY },
+  ) => void;
 
   expandIcon?: React.ReactNode;
   loadingIcon?: React.ReactNode;
+
+  requestFailureText?: string;
+  refreshText?: string;
 }
 
 type OnSingleChange = (value: CascaderValueType, selectOptions: DataNode[]) => void;
@@ -173,6 +185,9 @@ const Cascader = React.forwardRef((props: CascaderProps, ref: React.Ref<Cascader
     loadData,
     dropdownMenuColumnStyle,
     dropdownPrefixCls,
+
+    requestFailureText,
+    refreshText,
 
     ...restProps
   } = props;
@@ -330,6 +345,8 @@ const Cascader = React.forwardRef((props: CascaderProps, ref: React.Ref<Cascader
       dropdownMenuColumnStyle,
       search: searchConfig,
       dropdownPrefixCls,
+      requestFailureText,
+      refreshText,
     }),
     [
       changeOnSelect,

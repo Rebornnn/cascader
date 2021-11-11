@@ -1,7 +1,8 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import type { OptionDataNode } from '../interface';
-import { isLeaf } from '../util';
+import { LOAD_STATUS } from '../interface';
+import { connectValue, isLeaf } from '../util';
 import CascaderContext from '../context';
 import Checkbox from './Checkbox';
 
@@ -17,7 +18,8 @@ export interface ColumnProps {
   onToggleOpen: (open: boolean) => void;
   checkedSet: Set<React.Key>;
   halfCheckedSet: Set<React.Key>;
-  loadingKeys: React.Key[];
+  openFinalValue: React.Key;
+  // loadingKeys: React.Key[];
 }
 
 export default function Column({
@@ -31,13 +33,21 @@ export default function Column({
   onToggleOpen,
   checkedSet,
   halfCheckedSet,
-  loadingKeys,
-}: ColumnProps) {
+  openFinalValue,
+}: // loadingKeys,
+ColumnProps) {
   const menuPrefixCls = `${prefixCls}-menu`;
   const menuItemPrefixCls = `${prefixCls}-menu-item`;
 
-  const { changeOnSelect, expandTrigger, expandIcon, loadingIcon, dropdownMenuColumnStyle } =
-    React.useContext(CascaderContext);
+  const {
+    changeOnSelect,
+    expandTrigger,
+    expandIcon,
+    loadingIcon,
+    dropdownMenuColumnStyle,
+    requestFailureText,
+    refreshText,
+  } = React.useContext(CascaderContext);
 
   const hoverOpen = expandTrigger === 'hover';
 
@@ -48,7 +58,44 @@ export default function Column({
         const { disabled, value, node } = option;
         const isMergedLeaf = isLeaf(option);
 
-        const isLoading = loadingKeys.includes(value);
+        // const isLoading = loadingKeys.includes(value);
+        // 加载中
+        const isLoading = value === connectValue([openFinalValue, LOAD_STATUS.LOADING]);
+        if (isLoading) {
+          return (
+            <li
+              key={value}
+              className={classNames(menuItemPrefixCls, `${menuItemPrefixCls}-loading`)}
+              style={dropdownMenuColumnStyle}
+            >
+              {loadingIcon}
+            </li>
+          );
+        }
+
+        // 加载数据为空
+        const isLoadEmpty = value === connectValue([openFinalValue, LOAD_STATUS.LOAD_EMPTY]);
+        if (isLoadEmpty) {
+          return (
+            <li
+              key={value}
+              className={classNames(menuItemPrefixCls, `${menuItemPrefixCls}-load-empty`)}
+              style={dropdownMenuColumnStyle}
+            >
+              <div className={`${menuItemPrefixCls}-load-empty-content`}>
+                {requestFailureText}
+                <span
+                  className={`${menuItemPrefixCls}-load-empty-content-refresh`}
+                  onClick={() => {
+                    onOpen(index, openFinalValue);
+                  }}
+                >
+                  {refreshText}
+                </span>
+              </div>
+            </li>
+          );
+        }
 
         // >>>>> checked
         const checked = checkedSet.has(value);
@@ -83,7 +130,7 @@ export default function Column({
               [`${menuItemPrefixCls}-expand`]: !isMergedLeaf,
               [`${menuItemPrefixCls}-active`]: openKey === value,
               [`${menuItemPrefixCls}-disabled`]: disabled,
-              [`${menuItemPrefixCls}-loading`]: isLoading,
+              // [`${menuItemPrefixCls}-loading`]: isLoading,
             })}
             style={dropdownMenuColumnStyle}
             role="menuitemcheckbox"
@@ -107,7 +154,7 @@ export default function Column({
               }
             }}
           >
-            {multiple && (
+            {multiple && value !== '__EMPTY__' && !isLoading && (
               <Checkbox
                 prefixCls={`${prefixCls}-checkbox`}
                 checked={checked}
@@ -119,12 +166,15 @@ export default function Column({
               />
             )}
             <div className={`${menuItemPrefixCls}-content`}>{option.title}</div>
-            {!isLoading && expandIcon && !isMergedLeaf && (
+            {/* {!isLoading && expandIcon && !isMergedLeaf && (
+              <div className={`${menuItemPrefixCls}-expand-icon`}>{expandIcon}</div>
+            )} */}
+            {expandIcon && !isMergedLeaf && (
               <div className={`${menuItemPrefixCls}-expand-icon`}>{expandIcon}</div>
             )}
-            {isLoading && loadingIcon && (
+            {/* {isLoading && loadingIcon && (
               <div className={`${menuItemPrefixCls}-loading-icon`}>{loadingIcon}</div>
-            )}
+            )} */}
           </li>
         );
       })}
